@@ -13,7 +13,16 @@ import {
 } from "@polkadot-api/metadata-builders";
 import { EditCodec } from "./codec-components/EditCodec";
 
-const initialValue = `compact`;
+const initialValue = `{
+  compactValue: compact,
+  variant: Enum {
+    SomeType: u8,
+    AnotherType: Vec<{
+      tuple: [u8, i16],
+      boolean: bool
+    }>
+  }
+}`;
 const initialComponentValue: CodecComponentValue = {
   type: CodecComponentType.Initial,
   value: "",
@@ -65,8 +74,12 @@ function App() {
 
   return (
     <>
+      <h1 className="font-bold text-2xl">SCALE Tool</h1>
+      <p className="text-foreground/70">
+        Disclaimer: Super-alpha, developed in ~2hr
+      </p>
       <textarea
-        className="border rounded p-2 w-full"
+        className="border rounded p-2 w-full h-32 text-sm"
         value={value}
         onChange={(evt) => setValue(evt.target.value)}
       />
@@ -83,16 +96,32 @@ function App() {
               setComponentValue({ type: CodecComponentType.Updated, value })
             }
           />
-          <EditCodec
-            metadata={lookup.metadata}
-            codecType={0}
-            value={componentValue}
-            onUpdate={(value) =>
-              setComponentValue({ type: CodecComponentType.Updated, value })
-            }
-          />
+          <div className="p-2">
+            <EditCodec
+              metadata={lookup.metadata}
+              codecType={0}
+              value={componentValue}
+              onUpdate={(value) =>
+                setComponentValue({ type: CodecComponentType.Updated, value })
+              }
+            />
+          </div>
         </div>
       ) : null}
+
+      <hr />
+      <div className="text-foreground/80">
+        <h2 className="font-bold">Type definition syntax</h2>
+        <ul className="list-disc ml-5">
+          <li>Primitives: u8, u16, u32, …, bool</li>
+          <li>compact</li>
+          <li>{`{ structFieldName: innerType }`}</li>
+          <li>{`Vec<innerType>`}</li>
+          <li>{`Arr<innerType, length>`}</li>
+          <li>{`[tupleType1, tupleType2]`}</li>
+          <li>{`Enum { variant1: type1, variant2: type2 }`}</li>
+        </ul>
+      </div>
     </>
   );
 }
