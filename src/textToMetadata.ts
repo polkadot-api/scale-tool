@@ -49,7 +49,7 @@ const readStruct = (
   let res = nextToken(text);
   while (res[0] != "}") {
     const name = res[0];
-    if (res[1].startsWith(":")) {
+    if (!res[1].startsWith(":")) {
       throw new Error("Expected struct field to have `:`");
     }
     const innerBase = base + result.length;
@@ -122,7 +122,7 @@ const readEnum = (
   let res = nextToken(text);
   while (res[0] != "}") {
     const name = res[0];
-    if (res[1].startsWith(":")) {
+    if (!res[1].startsWith(":")) {
       throw new Error("Expected enum variant to have `:`");
     }
     const innerBase = base + result.length;
@@ -226,7 +226,6 @@ const textToLookup = (
       if (!match) {
         throw new Error(`Array expects to have a length parameter`);
       }
-      console.log(match);
       const lengthStr = match[1];
 
       return [
@@ -240,7 +239,7 @@ const textToLookup = (
           },
           ...inner,
         ],
-        innerRest.slice(1),
+        innerRest.slice(match[0].length),
       ];
     }
     case "[":
