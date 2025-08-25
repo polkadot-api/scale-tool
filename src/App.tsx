@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { textToMetadata } from "./textToMetadata";
-import { V15 } from "@polkadot-api/substrate-bindings";
 import {
   CodecComponentType,
   CodecComponentValue,
